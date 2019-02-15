@@ -1,0 +1,9 @@
+﻿{
+  "actions": [
+    {
+      "name": "Action1",
+      "attributes": { "values": [ 0, 0, 0, 0, 0, 0, 0 ] },
+      "distanceToTrigger": 2
+    }
+  ]
+}
