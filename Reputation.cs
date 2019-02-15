@@ -6,15 +6,6 @@ using System;
 
 namespace Reputations
 {
-    public enum CategoryImportance
-    {
-        NOT_AT_ALL = 0,
-        A_LITTLE = 1,
-        SOMEWHAT = 10,
-        VERY = 50,
-        MANDITORY = 250
-    }
-
     public struct SingleReputation
     {
         public Attributes attributes;
@@ -41,12 +32,6 @@ namespace Reputations
         float evilBias = 0.5f;
 
         public Attributes preferences = new Attributes();
-
-        Dictionary<IReputable, Attributes> knownAttributes = new Dictionary<IReputable, Attributes>();
-        public Dictionary<IReputable, Attributes> KnownAttributes
-        {
-            get { return knownAttributes; }
-        }
 
         Dictionary<IReputable, SingleReputation> reputables = new Dictionary<IReputable, SingleReputation>();
         public Dictionary<IReputable, SingleReputation> Reputables
@@ -129,7 +114,7 @@ namespace Reputations
         }
 
         /// <summary>
-        ///     If a reputable has some level of reputation help, then the reputation of that reputable will be given a boost
+        ///     If a reactee has some level of reputation help, then the reputation of that reactee will be given a boost
         /// </summary>
         /// <param name="reputation">The current reputation</param>
         /// <param name="reputationHelp">Ranges from -1 to 1</param>
@@ -157,34 +142,18 @@ namespace Reputations
         /// <returns></returns>
         public float Opinion(IReputable reputable, float reputationHelp = 0f)
         {
-            float reputation = Opinion( knownAttributes[reputable] );
+            float reputation = Opinion( reputables[reputable].attributes );
             return ApplyReputationHelp( reputation, reputationHelp );
         }
 
         /// <summary>
-        ///  Get the reacter's opinion of a set of attributes. Based on how close attributes are to the reacter's preference in attributes
+        ///  Get the reacter's opinion of a set of attributes.
         /// </summary>
         /// <param name="attributes"></param>
         /// <returns></returns>
         public float Opinion(Attributes attributes)
         {
             return Mathf.Pow(1 - preferences.Distance(attributes), 5f / 3f);
-        }
-    }
-
-
-    [System.Serializable]
-    public class ReputationCategoryBias
-    {
-        public CategoryImportance categoryImportance = CategoryImportance.SOMEWHAT;
-
-        [Range(0.0f, 1.0f)]
-        public float categoryPreference = 0.5f;
-
-        public ReputationCategoryBias(CategoryImportance _importance = CategoryImportance.SOMEWHAT, float _preference = 0.5f)
-        {
-            categoryImportance = _importance;
-            categoryPreference = _preference;
         }
     }
 }
